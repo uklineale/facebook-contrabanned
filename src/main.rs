@@ -27,7 +27,7 @@ fn main() {
         }
     }
 
-    let addr = ([127, 0, 0, 1], port).into();
+    let addr = ([0, 0, 0, 0], port).into();
 
     let new_svc = || {
         service_fn_ok(hello_world)
