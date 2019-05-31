@@ -1,1 +1,1 @@
-web: SERVER_PORT=$PORT ./target/release/facebook-contrabanned
+web: ./target/release/facebook-contrabanned
