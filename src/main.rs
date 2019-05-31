@@ -8,7 +8,7 @@ use hyper::header::USER_AGENT;
 
 fn main() {
     const FAKE_CONTENT: &str = "Hello, Facebook bot!";
-    const REAL_CONTENT: &str = "Hello, Alex Jones!";
+    const REAL_CONTENT: &str = "Hello, censorship evader!";
     let port : u16;
 
     match env::var("PORT") {
