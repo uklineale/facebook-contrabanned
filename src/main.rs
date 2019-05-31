@@ -12,8 +12,11 @@ fn main() {
     let port : u16;
 
     match env::var("PORT") {
-        Ok(p) => port = p.parse::<u16>().unwrap(),
-        Err(e) => port = 3000,
+        Ok(p) => { port = p.parse::<u16>().unwrap(); },
+        Err(e) => {
+            println!("PORT variable not found. Using default of 3000.");
+            port = 3000;
+        },
     };
 
     fn hello_world(req: Request<Body>) -> Response<Body> {
