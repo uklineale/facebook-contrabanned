@@ -11,10 +11,10 @@ fn main() {
     const REAL_CONTENT: &str = "Hello, Alex Jones!";
     let port : u16;
 
-    match env::var("PORT") {
+    match env::var("SERVER_PORT") {
         Ok(p) => { port = p.parse::<u16>().unwrap(); },
         Err(e) => {
-            println!("PORT variable not found. Using default of 3000.");
+            println!("SERVER_PORT variable not found. Using default of 3000.");
             port = 3000;
         },
     };
