@@ -5,4 +5,4 @@ authors = ["Neel Kuila <nkuila@bandwidth.com>"]
 edition = "2018"
 
 [dependencies]
-hyper = "0.12.29"
+rocket = "0.4.1"
