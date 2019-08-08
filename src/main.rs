@@ -1,14 +1,25 @@
 #![feature(proc_macro_hygiene, decl_macro)]
-
+#[macro_use] extern crate serde_derive;
 #[macro_use] extern crate rocket;
-extern crate uuid;
+#[macro_use] extern crate rocket_contrib;
+
+mod proxyset;
 
 use std::env;
 use std::sync::{Mutex, Arc};
 use std::collections::HashMap;
 use rocket::State;
+use rocket_contrib::json::Json;
+
+use std::string::String;
+use crate::proxyset::{ProxySet, ProxySetRequest};
 use rocket::response::Redirect;
-use uuid::Uuid;
+use rocket::Request;
+use rocket::request;
+use rocket::Outcome;
+use rocket::request::FromRequest;
+use std::option::Option;
+use std::option::Option::Some;
 
 const FAKE_CONTENT: &str = "Hello, Facebook bot!";
 const REAL_CONTENT: &str = "Hello, regular person!";
@@ -19,25 +30,27 @@ struct RedirectMap{
 }
 
 #[get("/<content_id>")]
-fn get_content(content_id: String, redirects: State<RedirectMap>) -> String {
+fn get_content(content_id: String, redirects: State<RedirectMap>, user_agent: UserAgent) -> Redirect {
     let redirect_map = redirects.redirect_map.lock().unwrap();
     let urls = redirect_map.get(&content_id).unwrap();
-    format!("Your redirect URL are:\n{}\n{}", urls.0, urls.1)
+
+    println!("User Agent is {:?}", user_agent.user_agent);
     // Can use a 307 (::temporary()) to pass POST data, be a real proxy
-//    Redirect::to(target_url)
+    Redirect::to(urls.0.clone())
 }
 
 // TODO import your own Redirect class
 // TODO Get POST body data
 // TODO hook up to database
 #[post("/", format = "application/json", data = "<urls>")]
-fn create_redirect(urls: Json<Redirect>, redirects: State<RedirectMap>) -> String {
+fn create_redirect(urls: Json<ProxySetRequest>, redirects: State<RedirectMap>) -> String {
 
     let mut redirect_map = redirects.redirect_map.lock().unwrap();
 
-    let redirect_id = Uuid::new_v4().to_string();
-    redirect_map.insert(redirect_id, (real_redirect_url, fake_redirect_url));
-    format!("Your redirect is stored at {}{}", SITE_URL, redirect_id)
+    let proxy_set = urls.0.convert();
+
+    redirect_map.insert(proxy_set.id.clone(), (proxy_set.real_url, proxy_set.fake_url));
+    format!("Your redirect is stored at {}{}", SITE_URL, proxy_set.id)
 }
 
 fn main() {
