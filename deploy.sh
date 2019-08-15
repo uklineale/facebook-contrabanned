@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-# I forget these every time
+# Commands I forget every time
 git push heroku master
