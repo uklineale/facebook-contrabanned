@@ -8,7 +8,7 @@ mod proxyset;
 use std::env;
 use std::sync::{Mutex, Arc};
 use std::collections::HashMap;
-use rocket::State;
+use rocket::{State, Data};
 use rocket_contrib::json::Json;
 
 use std::string::String;
@@ -20,6 +20,9 @@ use rocket::Outcome;
 use rocket::request::FromRequest;
 use std::option::Option;
 use std::option::Option::Some;
+use rocket::data::{FromData, Transform, FromDataSimple};
+use rocket::http::Status;
+use rocket::outcome::Outcome::{Success, Failure};
 
 const FAKE_CONTENT: &str = "Hello, Facebook bot!";
 const REAL_CONTENT: &str = "Hello, regular person!";
@@ -27,6 +30,32 @@ const SITE_URL: &str = "https://facebook-contrabanned.herokuapp.com/";
 
 struct RedirectMap{
     redirect_map: Arc<Mutex<HashMap<String, (String, String)>>>,
+}
+
+struct UserAgent {
+    user_agent: String
+}
+
+#[derive(Debug)]
+enum UserAgentError {
+    MultipleUserAgents
+}
+
+impl <'a, 'r> FromRequest<'a, 'r> for UserAgent {
+    type Error = UserAgentError;
+
+    fn from_request(request: &'a Request<'r>) -> Outcome<Self, (Status, Self::Error), ()> {
+        let user_agent: Vec<_> = request.headers().get("User-Agent").collect();
+        match user_agent.len() {
+            0 => Success(UserAgent{
+                user_agent: "N/A".to_string()
+            }),
+            1 => Success(UserAgent{
+                user_agent: user_agent[0].to_string()
+            }),
+            _ => Failure((Status::BadRequest, UserAgentError::MultipleUserAgents))
+        }
+    }
 }
 
 #[get("/<content_id>")]
