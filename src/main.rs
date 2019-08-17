@@ -31,19 +31,14 @@ fn get_content(content_id: String, redirects: State<RedirectMap>, user_agent: Us
     let redirect_map = redirects.redirect_map.lock().unwrap();
 
     //TODO rewrite functionally
-    if redirect_map.contains_key(&content_id) {
-        let (real_url, fake_url) = redirect_map.get(&content_id).unwrap();
-
-        // Can use a 307 (::temporary()) to pass POST data, be a real proxy
-        //TODO use set of keywords
-        if user_agent.user_agent.to_lowercase().contains("facebook") {
-            Some(Redirect::to(fake_url.clone()))
-        } else {
-            Some(Redirect::to(real_url.clone()))
-        }
-    } else {
-        None
-    }
+    redirect_map.get(&content_id)
+        .map_or(None,|(real_url, fake_url)| {
+            if user_agent.user_agent.to_lowercase().contains("facebook") {
+                Some(Redirect::to(fake_url.clone()))
+            } else {
+                Some(Redirect::to(real_url.clone()))
+            }
+        })
 }
 
 // TODO hook up to database
