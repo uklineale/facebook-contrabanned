@@ -23,10 +23,8 @@ use rocket::request::FromRequest;
 use std::option::Option;
 use std::option::Option::Some;
 use rocket::data::{FromData, Transform, FromDataSimple};
-use rocket::outcome::Outcome::{Success, Failure};
+use rocket::http::Status;
 
-const FAKE_CONTENT: &str = "Hello, Facebook bot!";
-const REAL_CONTENT: &str = "Hello, regular person!";
 const SITE_URL: &str = "https://facebook-contrabanned.herokuapp.com/";
 
 struct RedirectMap{
@@ -34,28 +32,32 @@ struct RedirectMap{
 }
 
 #[get("/<content_id>")]
-fn get_content(content_id: String, redirects: State<RedirectMap>, user_agent: UserAgent) -> Redirect {
+fn get_content(content_id: String, redirects: State<RedirectMap>, user_agent: UserAgent) -> Option<Redirect> {
     let redirect_map = redirects.redirect_map.lock().unwrap();
-    let (real_url, fake_url) = redirect_map.get(&content_id).unwrap();
 
-    // Can use a 307 (::temporary()) to pass POST data, be a real proxy
-    if (user_agent.user_agent.to_lowercase().contains("facebook")) {
-        Redirect::to(fake_url.clone())
+    //TODO rewrite functionally
+    if redirect_map.contains_key(&content_id) {
+        let (real_url, fake_url) = redirect_map.get(&content_id).unwrap();
+
+        // Can use a 307 (::temporary()) to pass POST data, be a real proxy
+        if user_agent.user_agent.to_lowercase().contains("facebook") {
+            Some(Redirect::to(fake_url.clone()))
+        } else {
+            Some(Redirect::to(real_url.clone()))
+        }
     } else {
-        Redirect::to(real_url.clone())
+        None
     }
 }
 
 // TODO hook up to database
 #[post("/", format = "application/json", data = "<urls>")]
 fn create_redirect(urls: Json<ProxySetRequest>, redirects: State<RedirectMap>) -> String {
-
     let mut redirect_map = redirects.redirect_map.lock().unwrap();
-
     let proxy_set = urls.0.convert();
 
     redirect_map.insert(proxy_set.id.clone(), (proxy_set.real_url, proxy_set.fake_url));
-    format!("Your redirect is stored at {}{}", SITE_URL, proxy_set.id)
+    format!("{}", proxy_set.id)
 }
 
 fn main() {
