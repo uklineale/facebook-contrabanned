@@ -17,6 +17,9 @@ use rocket::response::Redirect;
 use std::option::Option;
 use std::option::Option::Some;
 
+//TODO use facebook API to automate creation of honeypots (requestBin forks)
+//TODO setup alarming on honeypots on a wider set of keywords
+
 const SITE_URL: &str = "https://facebook-contrabanned.herokuapp.com/";
 
 struct RedirectMap{
@@ -32,6 +35,7 @@ fn get_content(content_id: String, redirects: State<RedirectMap>, user_agent: Us
         let (real_url, fake_url) = redirect_map.get(&content_id).unwrap();
 
         // Can use a 307 (::temporary()) to pass POST data, be a real proxy
+        //TODO use set of keywords
         if user_agent.user_agent.to_lowercase().contains("facebook") {
             Some(Redirect::to(fake_url.clone()))
         } else {
