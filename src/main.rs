@@ -1,29 +1,21 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate rocket;
-#[macro_use] extern crate rocket_contrib;
 
 mod proxyset;
 mod user_agent;
 
-use std::env;
 use std::sync::{Mutex, Arc};
 use std::collections::HashMap;
-use rocket::{State, Data};
+use rocket::State;
 use rocket_contrib::json::Json;
 
 use std::string::String;
-use crate::proxyset::{ProxySet, ProxySetRequest};
+use crate::proxyset::ProxySetRequest;
 use crate::user_agent::UserAgent;
 use rocket::response::Redirect;
-use rocket::Request;
-use rocket::request;
-use rocket::Outcome;
-use rocket::request::FromRequest;
 use std::option::Option;
 use std::option::Option::Some;
-use rocket::data::{FromData, Transform, FromDataSimple};
-use rocket::http::Status;
 
 const SITE_URL: &str = "https://facebook-contrabanned.herokuapp.com/";
 
