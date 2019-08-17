@@ -48,7 +48,7 @@ fn create_redirect(urls: Json<ProxySetRequest>, redirects: State<RedirectMap>) -
     let proxy_set = urls.0.convert();
 
     redirect_map.insert(proxy_set.id.clone(), (proxy_set.real_url, proxy_set.fake_url));
-    format!("{}", proxy_set.id)
+    format!("{}{}", SITE_URL, proxy_set.id)
 }
 
 fn main() {
