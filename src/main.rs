@@ -32,11 +32,11 @@ fn get_content(content_id: String, redirects: State<RedirectMap>, user_agent: Us
 
     //TODO rewrite functionally
     redirect_map.get(&content_id)
-        .map_or(None,|(real_url, fake_url)| {
+        .map(|(real_url, fake_url)| {
             if user_agent.user_agent.to_lowercase().contains("facebook") {
-                Some(Redirect::to(fake_url.clone()))
+                Redirect::to(fake_url.clone())
             } else {
-                Some(Redirect::to(real_url.clone()))
+                Redirect::to(real_url.clone())
             }
         })
 }
