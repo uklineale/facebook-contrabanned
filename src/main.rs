@@ -18,7 +18,8 @@ use std::option::Option;
 use std::option::Option::Some;
 
 //TODO use facebook API to automate creation of honeypots (requestBin forks)
-//TODO setup alarming on honeypots on a wider set of keywords
+//TODO setup alarming on honeypots
+//TODO filter on a wider set of keywords
 
 const SITE_URL: &str = "https://facebook-contrabanned.herokuapp.com/";
 
@@ -30,7 +31,6 @@ struct RedirectMap{
 fn get_content(content_id: String, redirects: State<RedirectMap>, user_agent: UserAgent) -> Option<Redirect> {
     let redirect_map = redirects.redirect_map.lock().unwrap();
 
-    //TODO rewrite functionally
     redirect_map.get(&content_id)
         .map(|(real_url, fake_url)| {
             if user_agent.user_agent.to_lowercase().contains("facebook") {

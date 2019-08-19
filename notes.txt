@@ -1,0 +1,7 @@
+Known Facebook User Agents
+
+adreview
+facebookexternalhit
+cortex
+[FBAN/FBIOS;FBDV/iPhone10,3;FBMD/iPhone;FBSN/iOS;FBSV/12.3.1;FBSS/3;FBCR/Verizon;FBID/phone;FBLC/en_US;FBOP/5]
+https://developers.whatismybrowser.com/useragents/explore/software_name/facebook-app/10
