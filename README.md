@@ -15,7 +15,10 @@ To create your proxy set, send a POST request to https://facebook-contrabanned.h
 
 The user will get a response with the link to their proxy set. Post this link on Facebook.
 
+[Here's what users see on Facebook](https://imgur.com/SYTgOMd), and [here's where users ends up.](https://imgur.com/hVHvBZC)
 
+![alt text](https://imgur.com/SYTgOMd "What users see on Facebook")
+![alt text](https://imgur.com/SYTgOMd "Where users end up")
 
 
 ## But why?
