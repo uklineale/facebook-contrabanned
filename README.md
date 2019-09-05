@@ -17,9 +17,6 @@ The user will get a response with the link to their proxy set. Post this link on
 
 [Here's what users see on Facebook](https://imgur.com/SYTgOMd), and [here's where users ends up.](https://imgur.com/hVHvBZC)
 
-![What users see on Facebook](https://imgur.com/SYTgOMd)  
-![Where users end up](https://imgur.com/SYTgOMd)
-
 
 ## But why?
 I probably don't agree with the things this service may be used for, but I disagree with censorship more strongly.
