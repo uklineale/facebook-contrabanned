@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/uklineale/facebook-contrabanned.svg?branch=master)](https://travis-ci.com/uklineale/facebook-contrabanned)
+
 # Contra-banned
 
 Contra-banned is a selective redirect server that can circumvent Facebook's post censorship algorithm. It works by having the user create a proxy set. A proxy set is a pair of URLs; one fake, one real. Facebook crawlers get sent to the fake URL, and real users get sent to the real URL. 
