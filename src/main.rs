@@ -4,6 +4,7 @@
 
 mod proxyset;
 mod user_agent;
+mod db;
 
 use std::sync::{Mutex, Arc};
 use std::collections::HashMap;
@@ -13,6 +14,7 @@ use rocket_contrib::json::Json;
 use std::string::String;
 use crate::proxyset::ProxySetRequest;
 use crate::user_agent::UserAgent;
+use crate::db::*;
 use rocket::response::Redirect;
 use std::option::Option;
 use std::option::Option::Some;
@@ -31,14 +33,18 @@ struct RedirectMap{
 fn get_content(content_id: String, redirects: State<RedirectMap>, user_agent: UserAgent) -> Option<Redirect> {
     let redirect_map = redirects.redirect_map.lock().unwrap();
 
-    redirect_map.get(&content_id)
-        .map(|(real_url, fake_url)| {
-            if user_agent.user_agent.to_lowercase().contains("facebook") {
-                Redirect::to(fake_url.clone())
-            } else {
-                Redirect::to(real_url.clone())
-            }
-        })
+
+    let proxy_set = db::get_proxy_set(content_id);
+    format!("Real url: {} \n Fake url: {} \n", proxy_set.0, proxy_set.1);
+
+    Option::from(
+    if user_agent.user_agent.to_lowercase().contains("facebook") {
+            Redirect::to(proxy_set.1.clone())
+        } else {
+            Redirect::to(proxy_set.0.clone())
+        }
+    )
+
 }
 
 // TODO hook up to database
@@ -52,6 +58,8 @@ fn create_redirect(urls: Json<ProxySetRequest>, redirects: State<RedirectMap>) -
 }
 
 fn main() {
+
+
     rocket::ignite()
         .manage(RedirectMap {redirect_map: Arc::new(Mutex::new(HashMap::new()))})
         .mount("/", routes![get_content, create_redirect])
