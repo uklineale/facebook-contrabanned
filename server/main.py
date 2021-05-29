@@ -21,7 +21,10 @@ def is_facebook(r):
 
 @app.route('/redirects/<id>', methods=['GET'])
 def handle_redirect(id):
-    rs = redirect_sets[id]
+    try:
+        rs = redirect_sets[id]
+    except KeyError:
+        return 400
 
     if is_facebook(request):
         return redirect(rs.fake_url)
@@ -39,4 +42,5 @@ def create_redirect_set():
            Fake URL: %s
            ''' % (rs.id, rs.real_url, rs.fake_url)
 
-app.run(host='0.0.0.0', port=4001)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=4001)
