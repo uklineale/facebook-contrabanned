@@ -18,6 +18,9 @@ def is_facebook(r):
         isCrawler = True
 
     return isCrawler
+@app.route('/')
+def home():
+    return "Hi, welcome to Chili's!"
 
 @app.route('/redirects/<id>', methods=['GET'])
 def handle_redirect(id):
@@ -43,4 +46,4 @@ def create_redirect_set():
            ''' % (rs.id, rs.real_url, rs.fake_url)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4001)
+    app.run(host='0.0.0.0', port=7000)
