@@ -1,4 +1,5 @@
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, render_template
+import requests
 import uuid
 
 app = Flask(__name__)
@@ -20,7 +21,7 @@ def is_facebook(r):
     return isCrawler
 @app.route('/')
 def home():
-    return "Hi, welcome to Chili's!"
+    return render_template('index.html', title='Contrabanned')
 
 @app.route('/redirects/<id>', methods=['GET'])
 def handle_redirect(id):
