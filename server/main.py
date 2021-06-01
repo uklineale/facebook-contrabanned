@@ -1,5 +1,4 @@
 from flask import Flask, request, redirect, render_template
-import requests
 import uuid
 
 app = Flask(__name__)

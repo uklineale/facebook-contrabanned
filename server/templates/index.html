@@ -16,8 +16,8 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
 <!-- Header -->
 <header class="w3-container w3-red w3-center" style="padding:128px 16px">
-  <h1 class="w3-margin w3-jumbo">START PAGE</h1>
-  <p class="w3-xlarge">Template by w3.css</p>
+  <h1 class="w3-margin w3-jumbo">Contrabanned</h1>
+  <p class="w3-xlarge">A website to get around the Facebook censorship</p>
   <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top" href="javascript:void(0);" onclick="createRedirectSet()">Get Started</button>
 </header>
 
@@ -74,11 +74,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
 </footer>
 
-<script>
-function createRedirectSet() {
-  console.log("Hello world")
-}
-</script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'index.js') }}"></script>
 
 </body>
 </html>
