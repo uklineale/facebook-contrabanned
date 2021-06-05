@@ -1,14 +1,7 @@
 from flask import Flask, request, redirect, render_template
-import uuid
+import dao
 
 app = Flask(__name__)
-redirect_sets = {}
-
-class RedirectSet:
-    def __init__(self, real_url, fake_url):
-        self.id = str(uuid.uuid4())
-        self.real_url = real_url
-        self.fake_url = fake_url
 
 def is_facebook(r):
     isCrawler = False
@@ -18,32 +11,29 @@ def is_facebook(r):
         isCrawler = True
 
     return isCrawler
+
 @app.route('/')
 def home():
     return render_template('index.html', title='Contrabanned')
 
 @app.route('/redirects/<id>', methods=['GET'])
 def handle_redirect(id):
-    try:
-        rs = redirect_sets[id]
-    except KeyError:
-        return 400
+    redirect_set = dao.get(id)
+    if redirect_set is None:
+        # Todo: Friendlier 404 page
+        return "Item not found", 404
 
     if is_facebook(request):
-        return redirect(rs.fake_url)
+        return redirect(redirect_set.fake_url)
     else:
-        return redirect(rs.real_url)
+        return redirect(redirect_set.real_url)
 
 @app.route('/redirects', methods=['POST'])
 def create_redirect_set():
-    rs = RedirectSet(request.form['real_url'],
+    id = dao.insert(request.form['real_url'],
                      request.form['fake_url'])
-    redirect_sets[rs.id] = rs
-    return '''Created RedirectSet.
-           ID is %s
-           Real URL: %s
-           Fake URL: %s
-           ''' % (rs.id, rs.real_url, rs.fake_url)
+
+    return 'Your link to use is /redirects/%s' % (id)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7000)
