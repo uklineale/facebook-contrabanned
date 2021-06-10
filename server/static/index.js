@@ -1,15 +1,13 @@
 function createRedirectSet() {
-    var mydata = document.getElementById('mydata');
-    var myresponse = document.getElementById('myresponse');
-    var data = {
-        'real_url' : 'real URL',
-        'fake_url' : 'fake URL'
-    }
+    var realUrl = document.getElementById('real-url').value;
+    var fakeUrl = document.getElementById('fake-url').value;
+    var data = 'real_url=' + realUrl + '&fake_url=' + fakeUrl
+    console.log(data)
 
     // Todo: get request working
     var request = new XMLHttpRequest();
-    request.open('POST', 'http://localhost:7000/redirects/', true);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    request.open('POST', 'http://localhost:7000/redirects', true);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     request.onreadystatechange = function() {
       if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {

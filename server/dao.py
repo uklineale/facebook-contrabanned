@@ -24,11 +24,10 @@ def insert(real_url, fake_url):
 
 def get(id):
     try:
-        results = RedirectSet.get(id)
+        result = RedirectSet.get(id)
     except DoesNotExist:
         return None
-    for item in results:
-        return item
+    return result
 
 
 

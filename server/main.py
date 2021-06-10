@@ -32,7 +32,7 @@ def handle_redirect(id):
 def create_redirect_set():
     id = dao.insert(request.form['real_url'],
                      request.form['fake_url'])
-
+    print(id)
     return 'Your link to use is /redirects/%s' % (id)
 
 if __name__ == '__main__':

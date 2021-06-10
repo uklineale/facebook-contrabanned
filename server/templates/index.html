@@ -18,7 +18,13 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 <header class="w3-container w3-red w3-center" style="padding:128px 16px">
   <h1 class="w3-margin w3-jumbo">Contrabanned</h1>
   <p class="w3-xlarge">A website to get around the Facebook censorship</p>
-  <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top" href="javascript:void(0);" onclick="createRedirectSet()">Get Started</button>
+  <form action="http://localhost:7000/redirects" method="POST">
+    <label for="real-url">Real URL:</label><br>
+    <input type="text" id="real-url" name="real-url"><br>
+    <label for="fake-url">Fake URL:</label><br>
+    <input type="text" id="fake-url" name="fake-url">
+  </form>
+  <button name="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top" href="javascript:void(0);" onclick="createRedirectSet()">Get Started</button>
 </header>
 
 <!-- First Grid -->
