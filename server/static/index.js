@@ -1,26 +1,25 @@
-function createRedirectSet() {
+const website = 'http://localhost:7000/redirects'
+async function createRedirectSet() {
+    var outputHeader = document.getElementById('output-header')
+    var outputField = document.getElementById('output')
     var realUrl = document.getElementById('real-url').value;
     var fakeUrl = document.getElementById('fake-url').value;
     var data = 'real_url=' + realUrl + '&fake_url=' + fakeUrl
     console.log(data)
 
     // Todo: get request working
-    var request = new XMLHttpRequest();
-    request.open('POST', 'http://localhost:7000/redirects', true);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    request.onreadystatechange = function() {
-      if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-        console.log('succeed');
-        myresponse.value = request.responseText;
-      } else {
-        console.log('server error');
-      }
-    };
-
-    request.onerror = function() {
-      console.log('something went wrong');
-    };
-
-    request.send(data);
+    fetch(website, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: data
+    })
+    .then(res => res.text())
+    .then(redirectId => {
+        outputHeader.innerHTML = 'The link to your Redirect is:'
+        outputField.innerHTML = website + '/' + redirectId
+    })
 }

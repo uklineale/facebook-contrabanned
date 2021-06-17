@@ -23,6 +23,9 @@ def handle_redirect(id):
         # Todo: Friendlier 404 page
         return "Item not found", 404
 
+    print(redirect_set.real_url)
+    print(redirect_set.fake_url)
+
     if is_facebook(request):
         return redirect(redirect_set.fake_url)
     else:
@@ -33,7 +36,7 @@ def create_redirect_set():
     id = dao.insert(request.form['real_url'],
                      request.form['fake_url'])
     print(id)
-    return 'Your link to use is /redirects/%s' % (id)
+    return '%s' % (id)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7000)
