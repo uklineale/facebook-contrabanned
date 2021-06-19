@@ -1,4 +1,4 @@
-const website = 'http://localhost:7000/redirects'
+const website = 'http://contrabanned.info:8000/redirects'
 async function createRedirectSet() {
     var outputHeader = document.getElementById('output-header')
     var outputField = document.getElementById('output')
@@ -7,7 +7,6 @@ async function createRedirectSet() {
     var data = 'real_url=' + realUrl + '&fake_url=' + fakeUrl
     console.log(data)
 
-    // Todo: get request working
     fetch(website, {
         method: 'POST',
         mode: 'cors',
