@@ -1,4 +1,4 @@
-const website = 'http://contrabanned.info:8000/redirects'
+const website = 'http://34.217.175.63/:8000/redirects'
 async function createRedirectSet() {
     var outputHeader = document.getElementById('output-header')
     var outputField = document.getElementById('output')
