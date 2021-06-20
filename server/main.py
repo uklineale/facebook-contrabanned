@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 def is_facebook(r):
     isCrawler = False
-    userAgent = request.headers['User-Agent']
+    userAgent = r.headers['User-Agent']
     print(userAgent)
     if 'facebook' in userAgent:
         isCrawler = True
@@ -23,9 +23,6 @@ def handle_redirect(id):
         # Todo: Friendlier 404 page
         return "Item not found", 404
 
-    print(redirect_set.real_url)
-    print(redirect_set.fake_url)
-
     if is_facebook(request):
         return redirect(redirect_set.fake_url)
     else:
@@ -33,9 +30,14 @@ def handle_redirect(id):
 
 @app.route('/redirects', methods=['POST'])
 def create_redirect_set():
-    id = dao.insert(request.form['real_url'],
-                     request.form['fake_url'])
-    print(id)
+    real_url = request.form['real_url']
+    fake_url = request.form['fake_url']
+
+    if real_url is None or real_url == '' or \
+            fake_url is None or fake_url == '':
+        return "Bad request", 400
+
+    id = dao.insert(real_url, fake_url)
     return '%s' % (id)
 
 if __name__ == '__main__':

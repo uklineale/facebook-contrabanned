@@ -1,4 +1,5 @@
-const website = 'http://34.217.175.63/:8000/redirects'
+const endpoint = location.protocol + '//' + location.hostname +
+    (location.port ? ':'+location.port: '')+ '/redirects'
 async function createRedirectSet() {
     var outputHeader = document.getElementById('output-header')
     var outputField = document.getElementById('output')
@@ -6,8 +7,9 @@ async function createRedirectSet() {
     var fakeUrl = document.getElementById('fake-url').value;
     var data = 'real_url=' + realUrl + '&fake_url=' + fakeUrl
     console.log(data)
+    console.log(endpoint)
 
-    fetch(website, {
+    fetch(endpoint, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
@@ -18,7 +20,12 @@ async function createRedirectSet() {
     })
     .then(res => res.text())
     .then(redirectId => {
-        outputHeader.innerHTML = 'The link to your Redirect is:'
-        outputField.innerHTML = website + '/' + redirectId
+        if (redirectId === "Bad request") {
+            outputHeader.innerHTML = 'Invalid input provided.'
+            outputField.innerHTML = ''
+        } else {
+            outputHeader.innerHTML = 'The link to your Redirect is:'
+            outputField.innerHTML = endpoint + '/' + redirectId
+        }
     })
 }
