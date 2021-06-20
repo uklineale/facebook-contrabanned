@@ -1,0 +1,13 @@
+EC2
+- SG
+- EBS
+- ALB, global accelerator, TG
+IAM
+Route 53
+Dynamo
+Billing alert
+ACM
+
+Godaddy NS:
+ns55.domaincontrol.com
+ns56.domaincontrol.com
